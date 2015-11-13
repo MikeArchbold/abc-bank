@@ -3,17 +3,11 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account {
+public abstract class Account {
 
-    public static final int CHECKING = 0;
-    public static final int SAVINGS = 1;
-    public static final int MAXI_SAVINGS = 2;
-
-    private final int accountType;
     private List<Transaction> transactions;
 
-    public Account(int accountType) {
-        this.accountType = accountType;
+    public Account() {
         this.transactions = new ArrayList<Transaction>();
     }
 
@@ -24,17 +18,20 @@ public class Account {
             transactions.add(new Transaction(amount));
         }
     }
-
+    //overdrafting could be possible but it would make interest
+    //calculations more complicated
     public void withdraw(double amount) {
     	if (amount <= 0 || amount > sumTransactions()){
     		throw new IllegalArgumentException("amount must be greater than zero"
-    				+ "\ncannot overdraw from checking account");
+    				+ " and the account cannot overdraft");
     	}else{
     		transactions.add(new Transaction(-amount));
     	}
     }
 
-    public double interestEarned() {
+    public abstract double interestEarned();
+    public abstract String getAccountName();
+    /*public double interestEarned() {
         double amount = sumTransactions();
         switch(accountType){
             case SAVINGS:
@@ -51,17 +48,13 @@ public class Account {
             default:
                 return amount * 0.001;
         }
-    }
+    }*/
 
     public double sumTransactions() {
     	double sum = 0.0;
         for (Transaction t: transactions)
             sum += t.getAmount();
         return sum;
-    }
-
-    public int getAccountType() {
-        return accountType;
     }
     
     public List<Transaction> getTransactions(){
