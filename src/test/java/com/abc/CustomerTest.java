@@ -14,7 +14,8 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
-
+        
+        checkingAccount.withdraw(100.0);
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
         savingsAccount.withdraw(200.0);
@@ -36,6 +37,7 @@ public class CustomerTest {
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Account(Account.SAVINGS));
+        
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 

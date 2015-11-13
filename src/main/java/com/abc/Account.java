@@ -10,7 +10,7 @@ public class Account {
     public static final int MAXI_SAVINGS = 2;
 
     private final int accountType;
-    public List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Account(int accountType) {
         this.accountType = accountType;
@@ -25,13 +25,14 @@ public class Account {
         }
     }
 
-public void withdraw(double amount) {
-    if (amount <= 0) {
-        throw new IllegalArgumentException("amount must be greater than zero");
-    } else {
-        transactions.add(new Transaction(-amount));
+    public void withdraw(double amount) {
+    	if (amount <= 0 || amount > sumTransactions()){
+    		throw new IllegalArgumentException("amount must be greater than zero"
+    				+ "\ncannot overdraw from checking account");
+    	}else{
+    		transactions.add(new Transaction(-amount));
+    	}
     }
-}
 
     public double interestEarned() {
         double amount = sumTransactions();
@@ -41,9 +42,6 @@ public void withdraw(double amount) {
                     return amount * 0.001;
                 else
                     return 1 + (amount-1000) * 0.002;
-//            case SUPER_SAVINGS:
-//                if (amount <= 4000)
-//                    return 20;
             case MAXI_SAVINGS:
                 if (amount <= 1000)
                     return amount * 0.02;
@@ -56,18 +54,17 @@ public void withdraw(double amount) {
     }
 
     public double sumTransactions() {
-       return checkIfTransactionsExist(true);
-    }
-
-    private double checkIfTransactionsExist(boolean checkAll) {
-        double amount = 0.0;
+    	double sum = 0.0;
         for (Transaction t: transactions)
-            amount += t.amount;
-        return amount;
+            sum += t.getAmount();
+        return sum;
     }
 
     public int getAccountType() {
         return accountType;
     }
-
+    
+    public List<Transaction> getTransactions(){
+    	return transactions;
+    }
 }
