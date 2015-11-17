@@ -46,20 +46,33 @@ public class Customer {
         return statement;
     }
 
+    public void transfer(String type1, String type2, Double amount){
+    	Account withdrawAccount = null;
+    	Account depositAccount = null;
+    	
+    	for (Account a : accounts){
+    		if (type1.equals(a.getAccountName())){
+    			withdrawAccount = a;
+    			break;
+    		}
+    	}
+    	
+    	for (Account a : accounts){
+    		if (type2.equals(a.getAccountName())){
+    			depositAccount = a;
+    			break;
+    		}
+    	}
+    	
+    	if (withdrawAccount == null || depositAccount == null){
+    		throw new IllegalArgumentException("account not found");
+    	} else{
+    		withdrawAccount.withdraw(amount);
+    		depositAccount.deposit(amount);
+    	}
+    }
+    
     private String statementForAccount(Account a) {
-       //Translate to pretty account type
-        /*switch(a.getClass()){
-            case Account.:
-                s += "Checking Account\n";
-                break;
-            case Account.SAVINGS:
-                s += "Savings Account\n";
-                break;
-            case Account.MAXI_SAVINGS:
-                s += "Maxi Savings Account\n";
-                break;
-        }*/
-
     	String s = a.getAccountName() + "\n";
         
         //Now total up all the transactions

@@ -1,35 +1,46 @@
 package com.abc.accounts;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.ListIterator;
+
 import com.abc.Account;
+import com.abc.Transaction;
 
 public class MaxiSavings extends Account{
-
+	
 	//simply adding ints makes the code inflexibile
 	//may not be worth the flexibility though since its more verbose and complex
 	@Override
-	public double interestEarned() {
-		double lowerInterest = 0.02;
-		double higherInterest = 0.05;
-		double baseInterest = 0.01;
-		int lowerBound = 1000;
-		int higherBound = 2000;
+	public double interestEarned() {	
+		final double lowerInterest = 0.05;
+		final double upperInterest = 0.1;
+		Transaction transaction = null;
 		
-		double amount = sumTransactions();
-		if (amount < lowerBound){
-			return amount * lowerInterest;
+		Calendar datePenality = Calendar.getInstance();
+    	datePenality.add(Calendar.DATE, -10);
+    	Date penalty = datePenality.getTime();
+    	Double amount = sumTransactions();
+    	
+		ListIterator<Transaction> iterate = transactions.listIterator(transactions.size());
+		
+		while (iterate.hasPrevious()){
+			if (iterate.previous().getAmount() < 0){
+				transaction = iterate.next();
+				break;
+			}
 		}
-		else if (amount < higherInterest){
-			return (lowerBound * lowerInterest) + ((amount - lowerBound) * higherInterest);
+		
+    	if (penalty.compareTo(transaction.getDate()) > 0){
+			return amount * upperInterest;
 		}
-		else{
-			return (lowerBound * lowerInterest) + ( (higherBound - lowerBound) * higherInterest) + 
-					((amount - higherBound) * baseInterest);
-		}
+    	else{
+    		return amount * lowerInterest;
+    	}
 	}
 
 	@Override
 	public String getAccountName() {
 		return "Maxi Savings Account";
 	}
-
 }

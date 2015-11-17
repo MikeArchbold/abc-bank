@@ -2,10 +2,12 @@ package com.abc;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
+import java.util.Calendar;
+
 import org.junit.Test;
 
 import com.abc.accounts.Checking;
+import com.abc.accounts.MaxiSavings;
 import com.abc.accounts.Savings;
 
 public class CustomerTest {
@@ -39,22 +41,60 @@ public class CustomerTest {
     @Test
     public void testOneAccount(){
         Customer oscar = new Customer("Oscar").openAccount(new Savings());
-        
         assertEquals(1, oscar.getNumberOfAccounts());
     }
 
     @Test
     public void testTwoAccount(){
-        Customer oscar = new Customer("Oscar")
-                .openAccount(new Savings());
+        Customer oscar = new Customer("Oscar") .openAccount(new Savings());
         oscar.openAccount(new Checking());
         assertEquals(2, oscar.getNumberOfAccounts());
     }
+    
+    @Test
+    public void transferBetweenAccounts(){
+    	Account savings = new Savings();
+    	Account checking = new Checking();
+    	Customer oscar = new Customer("Oscar");
+    
+    	oscar.openAccount(savings);
+    	oscar.openAccount(checking);
+    	
+    	savings.deposit(200.00);
+    	oscar.transfer("Savings Account", "Checking Account", 100.00);
+    
+    	System.out.print(oscar.getStatement());
+    	assertEquals("Statement for Oscar\n" +
+    			"\n" + 
+    			"Savings Account\n" +
+    			"  deposit $200.00\n" +
+    			"  withdrawal $100.00\n" +
+    			"Total $100.00\n" +
+    			"\n" +
+    			"Checking Account\n" +
+    			"  deposit $100.00\n" +
+    			"Total $100.00\n" +
+    			"\n" +
+    			"Total In All Accounts $200.00", oscar.getStatement());
+    }
 
-    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar").openAccount(new Savings());
-        oscar.openAccount(new Checking());
-        assertEquals(3, oscar.getNumberOfAccounts());
+    @Test
+    public void maxiSavingsInterest(){
+    	Calendar transactionTime = Calendar.getInstance();
+    	transactionTime.add(Calendar.DATE, -15);
+    	
+    	Customer bob = new Customer("Bob");
+    	Account penalty = new MaxiSavings();
+    	Account noPenalty = new MaxiSavings();
+    	
+    	bob.openAccount(penalty);
+    	bob.openAccount(noPenalty);
+    	penalty.deposit(200);
+    	penalty.withdraw(20);
+    	noPenalty.deposit(200);
+    	noPenalty.withdrawSetDate(20, transactionTime.getTime());
+    	
+    	System.out.print("\n\nTotal interest earned: $" + bob.totalInterestEarned());
+    	assertEquals(27, bob.totalInterestEarned(), 0);
     }
 }
