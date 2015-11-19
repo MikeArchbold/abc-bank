@@ -12,11 +12,12 @@ public class Savings extends Account {
 		final int lowerBound = 1000;
 		
 		double amount = sumTransactions();
-		if (amount < lowerBound){
-			return amount * lowerRate;
+		if (amount < lowerBound){ 
+			return roundMoney(amount * compoundInterest(lowerRate));
 		}
 		else{
-			return (lowerBound * lowerRate) + ((amount-lowerBound) * higherRate);
+			return roundMoney((lowerBound * compoundInterest(lowerRate))
+					+ ((amount-lowerBound) * compoundInterest(higherRate)));
 		}
 	}
 

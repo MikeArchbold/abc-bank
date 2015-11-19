@@ -1,5 +1,7 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,8 @@ public class Bank {
         double total = 0;
         for(Customer c: customers)
             total += c.totalInterestEarned();
-        return total;
+        BigDecimal convert = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
+		return convert.doubleValue();
     }
 
     public String getFirstCustomer() {

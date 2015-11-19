@@ -1,5 +1,7 @@
 package com.abc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,15 @@ public abstract class Account {
     
     public Account() {
         this.transactions = new ArrayList<Transaction>();
+    }
+    
+    protected double roundMoney(double money){
+    	BigDecimal convert = new BigDecimal(money).setScale(2, RoundingMode.HALF_UP);
+		return convert.doubleValue();	
+    }
+    
+    protected double compoundInterest(double interest){
+    	return Math.pow(1+ interest/365, 365) - 1;
     }
     
     public void deposit(double amount) {

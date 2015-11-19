@@ -31,12 +31,16 @@ public class MaxiSavings extends Account{
 			}
 		}
 		
-    	if (penalty.compareTo(transaction.getDate()) > 0){
-			return amount * upperInterest;
+		try{
+			if (penalty.compareTo(transaction.getDate()) > 0){
+				return roundMoney(amount * compoundInterest(upperInterest));
+			}
+	    	else{
+	    		return roundMoney(amount * compoundInterest(lowerInterest));
+	    	}
+		}catch(NullPointerException ex){
+			return roundMoney(amount * compoundInterest(upperInterest));
 		}
-    	else{
-    		return amount * lowerInterest;
-    	}
 	}
 
 	@Override

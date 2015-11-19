@@ -63,7 +63,6 @@ public class CustomerTest {
     	savings.deposit(200.00);
     	oscar.transfer("Savings Account", "Checking Account", 100.00);
     
-    	System.out.print(oscar.getStatement());
     	assertEquals("Statement for Oscar\n" +
     			"\n" + 
     			"Savings Account\n" +
@@ -94,7 +93,6 @@ public class CustomerTest {
     	noPenalty.deposit(200);
     	noPenalty.withdrawSetDate(20, transactionTime.getTime());
     	
-    	System.out.print("\n\nTotal interest earned: $" + bob.totalInterestEarned());
-    	assertEquals(27, bob.totalInterestEarned(), 0);
+    	assertEquals(28.16, bob.totalInterestEarned(), 0);
     }
 }
