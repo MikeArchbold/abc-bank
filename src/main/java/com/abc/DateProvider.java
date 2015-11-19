@@ -17,13 +17,4 @@ public class DateProvider {
     public Date now() {
         return Calendar.getInstance().getTime();
     }
-    
-    @Test
-    public void output(){
-    	System.out.println(Calendar.getInstance().getTime());
-    	Calendar lowerLimit = Calendar.getInstance();
-    	lowerLimit.add(Calendar.DATE, -7);
-    	System.out.println(lowerLimit.getTime());
-    }
-    
 }
